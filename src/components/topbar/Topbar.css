@@ -1,0 +1,32 @@
+.topbar{
+    height: 100px;
+    width: 100%;
+    background-color: #A268FF;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.stdname{
+    font-size: 30px;
+    color: white;
+    word-spacing: 10px;
+    letter-spacing: 10px;
+    
+}
+
+.threeroot{
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    justify-content:space-between;
+    cursor: pointer;
+    letter-spacing: 5px;
+}
+.active-text {
+    border-bottom: 2px solid #fff; /* Add your desired border style */
+    /* You can add other styles here */
+}
