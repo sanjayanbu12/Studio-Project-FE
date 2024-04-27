@@ -1,7 +1,7 @@
 .topbar{
     height: 100px;
     width: 100%;
-    background-color: #A268FF;
+    background-image: linear-gradient(to bottom right, #aa00ff, #9600ff, #6f00ff, #5512fb, #3c00ff);
     display: flex;
     flex-direction: column;
     gap: 20px;
