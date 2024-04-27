@@ -1,0 +1,21 @@
+.details{
+    height: 100px;
+    width: 100%;
+    background-image: linear-gradient(to bottom right, #aa00ff, #9600ff, #6f00ff, #5512fb, #3c00ff);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.stdname{
+    font-size: 30px;
+    color: white;
+    word-spacing: 10px;
+    letter-spacing: 10px;
+    
+}
+
+
