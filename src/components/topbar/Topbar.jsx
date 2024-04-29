@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Topbar.css'
 import Report from '../reportgen/Report';
 import Cards from '../cards/Cards';
@@ -6,6 +6,13 @@ import Form from '../form/Form';
 
 const Topbar = () => {
     const [activeText, setActiveText] = useState('Text-1');
+    const [userid,setUserid]=useState('');
+
+   useEffect(()=>{
+    const userid = localStorage.getItem("userid");
+    setUserid(userid);
+   })
+
     return (
         <div>
             <div class="topbar">
@@ -21,7 +28,7 @@ const Topbar = () => {
                 <Cards />
             )}
             {activeText === 'Text-2' && (
-                <Form />
+                <Form userid={userid}/>
             )}
             {activeText === 'Text-3' && (
                 <Report />

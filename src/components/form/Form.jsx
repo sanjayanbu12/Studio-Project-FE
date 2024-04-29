@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './form.css';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import axios from 'axios';
 
-const Form = () => {
+const Form = (props) => {
+  const {userid}=props;
+  console.log(userid,"userid")
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -17,6 +24,25 @@ const Form = () => {
     width: 1,
   });
 
+  const handleCreateCard=async()=>{
+    const data = {
+      cardTitle: title,
+      price: price,
+      description: description,
+      userId: userid
+  }
+  try{
+     const res = await axios.post("http://localhost:5000/api/auth/createcard", data);
+     console.log(res)
+     setDescription('');
+     setPrice('');
+     setTitle('');
+  }
+  catch(error){
+   console.log(error)
+  }
+  }
+
   return (
     <div className='backgroundy'><div class="containers">
 	
@@ -28,18 +54,18 @@ const Form = () => {
         <div style={{display:"flex",justifyContent:"space-between"}}>
         <div class="input">
           <label class="input__label">Card title</label>
-          <input class="input__field" type="text"/> 
+          <input class="input__field" type="text" value={title} onChange={(e)=>setTitle(e.target.value)}/> 
          
         </div>
         <div  class="input">
           <label class="input__label">Price</label>
-          <input class="input__field" type="text"/> 
+          <input class="input__field" type="text" value={price} onChange={(e)=>setPrice(e.target.value)}/> 
           
         </div>
         </div>
         <div class="input">
                   <label class="input__label">Description</label>
-          <textarea class="input__field input__field--textarea"></textarea>
+          <textarea class="input__field input__field--textarea" value={description} onChange={(e)=>setDescription(e.target.value)}></textarea>
             <p class="input__description">Give your card profile for a good description so everyone know what's it for</p>
         </div>
         <div>
@@ -57,7 +83,7 @@ const Form = () => {
           </div>
       </div>
       <div class="modal__footer">
-        <button class="button button--primary">Create Card</button>
+        <button class="button button--primary" onClick={handleCreateCard}>Create Card</button>
       </div>
     </div>
   </div></div>

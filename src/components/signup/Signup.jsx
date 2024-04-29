@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Signup.css'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -19,6 +19,9 @@ const Signup = () => {
         try {
             const res = await axios.post("http://localhost:5000/api/auth/signup", data);
             console.log(res);
+            setEmail("");
+            setPassword("");
+            setUsername("");
             navigate('/')
         }
         catch (error) {
@@ -50,7 +53,9 @@ const Signup = () => {
                     </svg>
                     <input type="password" class="inputField1" id="password1" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
-                <button id='button1' type='button'>Submit</button>
+                <button id='button1' type='button' onClick={handleSignup}>Submit</button>
+                <div>or</div>
+                <Link to="/">Already have an account?</Link>
             </form>
         </div>
     )
