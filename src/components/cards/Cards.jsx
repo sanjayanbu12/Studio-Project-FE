@@ -2,15 +2,23 @@ import React, { useEffect, useState } from 'react';
 import './cards.css'
 import { useNavigate } from 'react-router-dom/dist';
 import axios from 'axios';
+import Details from '../details/Details';
 
 const Cards = () => {
   const [allCards, setAllCards] = useState([]);
-
+  const [open, setOpen] = React.useState(false);
+  const [cardDetails, setCardDetails] = useState({});
+ console.log(cardDetails,"cardDetails")
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    // navigate('/details');
+  const handleButtonClick = (card) => {
+    setOpen(true);
+    setCardDetails(card);
   };
+  const handleClose = () => {
+    setOpen(false);
+    setCardDetails({});
+  }
 
   const getAllCards = async () => {
     try {
@@ -40,12 +48,13 @@ const Cards = () => {
             {card.description}
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '70px' }} class="modal__footer">
-            <button class="button button--primary" onClick={handleButtonClick}>Book Now</button>
+            <button class="button button--primary" onClick={()=> handleButtonClick(card)}>Book Now</button>
           </div>
 
         </div>
       </div>
        ))}
+       {open === true && <Details open={open} handleClose={handleClose} cardDetails={cardDetails} />}
     </div>
   );
 };
