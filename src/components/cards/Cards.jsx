@@ -24,11 +24,11 @@ const Cards = () => {
 
   useEffect(() => {
     getAllCards();
-  },[allCards])
+  },[])
   return (
     <div className='allcards'>
       {allCards.map((card) => (
-      <div className="card" key={card._id}>
+      <div style={{ backgroundImage: `url(${card.image})` }} className="card" key={card._id}>
         <div className="card__label">&#8377;{card.price}</div>
         <p style={{ color: "white", fontSize: '25px' }} className="card__title">{card.cardTitle}</p>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

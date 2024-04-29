@@ -11,6 +11,7 @@ const Form = (props) => {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
+    const [imageFile, setImageFile] = useState(null);
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -23,25 +24,39 @@ const Form = (props) => {
     whiteSpace: 'nowrap',
     width: 1,
   });
+  const handleFileChange = (e) => {
+    // Set the selected file when the input value changes
+    if (e.target.files && e.target.files.length > 0) {
+      setImageFile(e.target.files[0]);
 
-  const handleCreateCard=async()=>{
-    const data = {
-      cardTitle: title,
-      price: price,
-      description: description,
-      userId: userid
-  }
-  try{
-     const res = await axios.post("http://localhost:5000/api/auth/createcard", data);
-     console.log(res)
-     setDescription('');
-     setPrice('');
-     setTitle('');
-  }
-  catch(error){
-   console.log(error)
-  }
-  }
+      console.log("imageFile",imageFile)
+    }
+  };
+
+  const handleCreateCard = async () => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    formData.append('cardTitle', title);
+    formData.append('price', price);
+    formData.append('description', description);
+    formData.append('userId', userid);
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/createcard', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', 
+        },
+      });
+
+      console.log(response.data);
+      setTitle('');
+      setPrice('');
+      setDescription('');
+      setImageFile(null);
+    } catch (error) {
+      console.error('Error creating card:', error);
+    }
+  };
 
   return (
     <div className='backgroundy'><div class="containers">
@@ -69,18 +84,16 @@ const Form = (props) => {
             <p class="input__description">Give your card profile for a good description so everyone know what's it for</p>
         </div>
         <div>
-        <Button sx={{backgroundImage:'linear-gradient(to bottom right, #aa00ff, #9600ff, #6f00ff, #5512fb, #3c00ff)',ml:'7px'}}
-      component="label"
-      role={undefined}
-      variant="contained"
-      tabIndex={-1}
-      startIcon={<CloudUploadIcon />}
-    >
-      Upload file
-      <VisuallyHiddenInput type="file" />
-    </Button>
-
-          </div>
+              <Button
+                sx={{ backgroundImage: 'linear-gradient(to bottom right, #aa00ff, #9600ff, #6f00ff, #5512fb, #3c00ff)', ml: '7px' }}
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload file
+                <input type="file" style={{ display: 'none' }} onChange={handleFileChange} />
+              </Button>
+            </div>
       </div>
       <div class="modal__footer">
         <button class="button button--primary" onClick={handleCreateCard}>Create Card</button>
