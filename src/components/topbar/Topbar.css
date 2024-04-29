@@ -4,7 +4,7 @@
     background-image: linear-gradient(to bottom right, #aa00ff, #9600ff, #6f00ff, #5512fb, #3c00ff);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    /* gap: 20px; */
     justify-content: center;
     align-items: center;
 }
@@ -14,6 +14,7 @@
     color: white;
     word-spacing: 10px;
     letter-spacing: 10px;
+   
     
 }
 
@@ -25,8 +26,41 @@
     justify-content:space-between;
     cursor: pointer;
     letter-spacing: 5px;
+    margin-top: 15px;
 }
 .active-text {
-    border-bottom: 2px solid #fff; /* Add your desired border style */
+    border-bottom: 2px solid #fff; 
+   /* Add your desired border style */
     /* You can add other styles here */
+}
+
+.animate-charcter
+{
+   text-transform: uppercase;
+  background-image: linear-gradient(
+    -225deg,
+    #231557 0%,
+    #44107a 29%,
+    #ff1361 67%,
+    #fff800 100%
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  /* text-fill-color: transparent; */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 2s linear infinite;
+  display: inline-block;
+      font-size: 40px;
+      font-weight: bold;
+      letter-spacing: 20px;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
 }

@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Form = (props) => {
   const {userid}=props;
@@ -12,6 +13,8 @@ const Form = (props) => {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
     const [imageFile, setImageFile] = useState(null);
+    const [fileName, setFileName] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -25,15 +28,15 @@ const Form = (props) => {
     width: 1,
   });
   const handleFileChange = (e) => {
-    // Set the selected file when the input value changes
     if (e.target.files && e.target.files.length > 0) {
-      setImageFile(e.target.files[0]);
-
-      console.log("imageFile",imageFile)
+      const selectedFile = e.target.files[0];
+      setImageFile(selectedFile);
+      setFileName(selectedFile.name); // Set the file name
     }
   };
 
   const handleCreateCard = async () => {
+    setIsSubmitting(true);
     const formData = new FormData();
     formData.append('image', imageFile);
     formData.append('cardTitle', title);
@@ -55,6 +58,8 @@ const Form = (props) => {
       setImageFile(null);
     } catch (error) {
       console.error('Error creating card:', error);
+    }finally{
+      setIsSubmitting(false);
     }
   };
 
@@ -84,20 +89,24 @@ const Form = (props) => {
             <p class="input__description">Give your card profile for a good description so everyone know what's it for</p>
         </div>
         <div>
-              <Button
-                sx={{ backgroundImage: 'linear-gradient(to bottom right, #aa00ff, #9600ff, #6f00ff, #5512fb, #3c00ff)', ml: '7px' }}
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-              >
-                Upload file
-                <input type="file" style={{ display: 'none' }} onChange={handleFileChange} />
-              </Button>
+        <Button
+  sx={{ backgroundImage: 'linear-gradient(to bottom right, #aa00ff, #9600ff, #6f00ff, #5512fb, #3c00ff)', ml: '7px' }}
+  component="label"
+  variant="contained"
+  startIcon={<CloudUploadIcon />}
+>
+  {fileName ? fileName : 'Upload file'}
+  <input type="file" style={{ display: 'none' }} onChange={handleFileChange} />
+</Button>
             </div>
       </div>
       <div class="modal__footer">
-        <button class="button button--primary" onClick={handleCreateCard}>Create Card</button>
-      </div>
+ 
+    <button class="button button--primary" onClick={handleCreateCard}>
+      {isSubmitting ? <CircularProgress sx={{fontSize:"15px",color:'white'}}/> : 'Create Card'}
+    </button>
+  
+</div>
     </div>
   </div></div>
   )

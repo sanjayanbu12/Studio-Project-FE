@@ -1,7 +1,8 @@
 .allcards{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  margin-left: 100px;
+ 
 }
 .card {
     position: relative;

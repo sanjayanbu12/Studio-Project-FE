@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import './Login.css'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import Alert from '@mui/material/Alert';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
 const handleLogin = async () => {
@@ -22,10 +24,30 @@ const handleLogin = async () => {
         navigate('/home');
     } catch (error) {
         console.log(error);
+        setError("Login failed. Please check your credentials and try again.");
+        
     }
 }
+const handleCloseError = () => {
+    setError(null); 
+};
     return (
         <div class="container">
+           {error && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: 20,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '80%',
+                    maxWidth: 600, 
+                    zIndex: 1000    
+                }}>
+                    <Alert severity="error" onClose={handleCloseError}>
+                        {error}
+                    </Alert>
+                </div>
+            )}
             <form action="" class="form_main">
                 <p class="heading">Login</p>
 
@@ -44,6 +66,7 @@ const handleLogin = async () => {
                 </div>
                 <button id="button" type='button' onClick={handleLogin}>Submit</button>
                 <div>or</div>
+                
                 <Link to="/signup">Create an account</Link>
             </form>
             

@@ -2,35 +2,101 @@ import React, { useState } from 'react'
 import './Signup.css'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
 
 const Signup = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+    const handleEmailChange = (e) => {
+        const { value } = e.target;
+        setEmail(value);
+        setEmailError(!validateEmail(value));
+    };
+    const validatePassword = (password) => {
+        // Password must contain at least one uppercase letter, one special character, and be at least 8 characters long
+        const uppercaseRegex = /[A-Z]/;
+        const specialCharRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|\-]/;
+        return (
+            password.length >= 8 &&
+            uppercaseRegex.test(password) &&
+            specialCharRegex.test(password)
+        );
+    };
 
     const handleSignup = async () => {
+        const isEmailValid = validateEmail(email);
+        const isPasswordValid = validatePassword(password);
+    
+        if (!isEmailValid) {
+            setEmailError(true);
+            return;
+        }
+    
+        if (!isPasswordValid) {
+            setPasswordError(true);
+            return;
+        }
+    
         const data = {
             email: email,
             password: password,
             name: username
-        }
-        console.log(data, "data")
+        };
+    
         try {
             const res = await axios.post("http://localhost:5000/api/auth/signup", data);
             console.log(res);
             setEmail("");
             setPassword("");
             setUsername("");
-            navigate('/')
+            navigate('/');
+        } catch (error) {
+            console.log(error);
         }
-        catch (error) {
-            console.log(error)
-
-        }
-    }
+    };
     return (
         <div class="container1">
+             {emailError && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: 20,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '80%',
+                    maxWidth: 600, 
+                    zIndex: 1000    
+                }}>
+    <Alert severity="error" className="alert">
+        Please enter a valid email address.
+    </Alert>
+    </div>
+)}
+ {passwordError && (
+
+<div style={{
+    position: 'fixed',
+    bottom: 20,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '80%',
+    maxWidth: 600, 
+    zIndex: 1000    
+}}>
+<Alert severity="error" className="alert">
+  Password must be at least 8 characters long and contain at least one uppercase letter and one special character.
+
+</Alert>
+</div>
+           
+        )}
             <form action="" class="form_main1">
                 <p class="heading1">Sign up</p>
                 <div class="inputContainer1">
@@ -38,7 +104,14 @@ const Signup = () => {
                         <path d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7" stroke="#000000" stroke-width="2" stroke-linecap="round" strokeLinejoin="round" />
                         <rect x="3" y="5" width="18" height="14" rx="2" stroke="#000000" stroke-width="2" stroke-linecap="round" />
                     </svg>
-                    <input type="text" class="inputField1" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input
+    type="text"
+    className="inputField1"
+    id="email"
+    placeholder="Email"
+    value={email}
+    onChange={handleEmailChange}
+/>
                 </div>
                 <div class="inputContainer1">
                     <svg class="inputIcon1" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

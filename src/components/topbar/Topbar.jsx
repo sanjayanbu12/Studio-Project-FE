@@ -17,7 +17,7 @@ const Topbar = () => {
         <div>
             <div class="topbar">
 
-                <div className='stdname'>STUDIO PURPLE</div>
+                <div className='animate-charcter'> Studi0 </div>
                 <div className='threeroot'>
                     <div className={activeText === 'Text-1' ? 'active-text' : ''} onClick={() => setActiveText('Text-1')} style={{padding:"0 10px 5px 10px"}}>Text-1</div>
                     <div className={activeText === 'Text-2' ? 'active-text' : ''} onClick={() => setActiveText('Text-2')} style={{padding:"0 10px 5px 10px"}}>Text-2</div>
