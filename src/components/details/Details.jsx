@@ -89,8 +89,9 @@ const Details = (props) => {
       }
       console.log('Data submitted successfully!');
     } catch (error) {
-      console.error('Error submitting data:', error.message);
-      setError("Report with this date already exists");
+      if (error.response && error.response.status === 400) {
+        setError("Report with this date already exists");
+      } 
     }
   }
 
