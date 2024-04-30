@@ -8,7 +8,7 @@ import { Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Topbar = () => {
-    const [activeText, setActiveText] = useState('Text-1');
+    const [activeText, setActiveText] = useState('Plans');
     const [userid, setUserid] = useState('');
     const [role, setRole] = useState('');
     const [name, setName] = useState('');
@@ -41,7 +41,7 @@ const Topbar = () => {
         <div>
             <div class="topbar">
                 <div className='menubar'>
-                    <div className='animate-charcter'> Studi0 </div>
+                    <div className='animate-charcter'> Studi0 Purple</div>
                     <MenuIcon
                     style={{width:"50px",height:"50px",marginTop:"10px"}}
                         aria-controls={open ? 'basic-menu' : undefined}
@@ -64,18 +64,18 @@ const Topbar = () => {
                 </div>
 
                 <div className='threeroot'>
-                    <div className={activeText === 'Text-1' ? 'active-text' : ''} onClick={() => setActiveText('Text-1')} style={{ padding: "0 10px 5px 10px" }}>Text-1</div>
-                    {role === 'Admin' ? <div className={activeText === 'Text-2' ? 'active-text' : ''} onClick={() => setActiveText('Text-2')} style={{ padding: "0 10px 5px 10px" }}>Text-2</div> : null}
-                    {role === 'Admin' ? <div className={activeText === 'Text-3' ? 'active-text' : ''} onClick={() => setActiveText('Text-3')} style={{ padding: "0 10px 5px 10px" }}>Text-3</div> : null}
+                    <div className={activeText === 'Plans' ? 'active-text' : ''} onClick={() => setActiveText('Plans')} style={{ padding: "0 10px 5px 10px" }}>Plans</div>
+                    {role === 'Admin' ? <div className={activeText === 'Form' ? 'active-text' : ''} onClick={() => setActiveText('Form')} style={{ padding: "0 10px 5px 10px" }}>Form</div> : null}
+                    {role === 'Admin' ? <div className={activeText === 'Report' ? 'active-text' : ''} onClick={() => setActiveText('Report')} style={{ padding: "0 10px 5px 10px" }}>Report</div> : null}
                 </div>
             </div>
-            {activeText === 'Text-1' && (
+            {activeText === 'Plans' && (
                 <Cards userid={userid}/>
             )}
-            {activeText === 'Text-2' && (
+            {activeText === 'Form' && (
                 <Form userid={userid} />
             )}
-            {activeText === 'Text-3' && (
+            {activeText === 'Report' && (
                 <Report />
             )}
         </div>

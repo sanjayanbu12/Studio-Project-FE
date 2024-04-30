@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Details.css';
 import axios from 'axios';
 import { Box, InputLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: "60%",
+  width: "35%",
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
@@ -18,15 +19,33 @@ const style = {
   borderRadius: "10px",
 };
 
-
-
 const Details = (props) => {
   const { userid } = props;
   const { open, handleClose, cardDetails } = props;
 
   const [date, setDate] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
-  
+  const [reports, setReports] = useState('');
+  console.log("reports", reports);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/auth/getallreports');
+        if (response.status === 200) {
+          const reportDates = (response.data.reports.map((data) => data.date));
+          setReports(reportDates);
+        }
+      } catch (error) {
+        console.error('Error fetching reports:', error.message);
+      }
+    };
+
+    fetchReports();
+  }, []);
+  console.log("reports", reports);
+
 
   const handlePaymentMethod = () => {
     var options = {
@@ -71,9 +90,13 @@ const Details = (props) => {
       console.log('Data submitted successfully!');
     } catch (error) {
       console.error('Error submitting data:', error.message);
+      setError("Report with this date already exists");
     }
   }
 
+  const handleCloseError = () => {
+    setError(null); // Reset error state when closing the alert
+  }
 
   return (
     <div >
@@ -84,6 +107,21 @@ const Details = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+        {error && (
+            <div style={{
+              position: 'fixed',
+              bottom: 20,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '80%',
+              maxWidth: 600,
+              zIndex: 1000
+            }}>
+              <Alert severity="error" onClose={handleCloseError}>
+                {error}
+              </Alert>
+            </div>
+          )}
           <Typography id="modal-modal-title" variant="h4" component="h2" style={{ textAlign: "center" }}>
             {cardDetails.cardTitle}
           </Typography>
@@ -95,6 +133,7 @@ const Details = (props) => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+            
             />
           </div>
           <div>
