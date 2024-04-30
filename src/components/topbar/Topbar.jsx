@@ -25,7 +25,7 @@ const Topbar = () => {
                 </div>
             </div>
             {activeText === 'Text-1' && (
-                <Cards />
+                <Cards userid={userid}/>
             )}
             {activeText === 'Text-2' && (
                 <Form userid={userid}/>

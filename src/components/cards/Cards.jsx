@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom/dist';
 import axios from 'axios';
 import Details from '../details/Details';
 
-const Cards = () => {
+const Cards = (props) => {
+  const {userid}=props;
   const [allCards, setAllCards] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [cardDetails, setCardDetails] = useState({});
@@ -54,7 +55,7 @@ const Cards = () => {
         </div>
       </div>
        ))}
-       {open === true && <Details open={open} handleClose={handleClose} cardDetails={cardDetails} />}
+       {open === true && <Details open={open} handleClose={handleClose} cardDetails={cardDetails} userid={userid} />}
     </div>
   );
 };
