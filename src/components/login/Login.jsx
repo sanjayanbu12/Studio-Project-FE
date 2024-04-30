@@ -17,8 +17,11 @@ const handleLogin = async () => {
     }
     try {
         const res = await axios.post("http://localhost:5000/api/auth/signin", data);
-        console.log(res);
-        localStorage.setItem("userid", res.data);
+        console.log(res.data);
+        localStorage.setItem("userid", res.data._id);
+        localStorage.setItem("role", res.data.role);
+        localStorage.setItem("email", res.data.email);
+        localStorage.setItem("name", res.data.name);
         setEmail('');
         setPassword('');
         navigate('/home');

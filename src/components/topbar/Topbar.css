@@ -57,10 +57,25 @@
       font-size: 40px;
       font-weight: bold;
       letter-spacing: 20px;
+      display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 @keyframes textclip {
   to {
     background-position: 200% center;
   }
+}
+
+.menubar{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+  cursor: pointer;
+  color: white;
+  height: 20px;
 }
