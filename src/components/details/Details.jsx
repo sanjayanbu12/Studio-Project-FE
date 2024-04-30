@@ -4,6 +4,7 @@ import { Box, Button, InputLabel, MenuItem, Modal, Select, Typography } from '@m
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 const style = {
   position: 'absolute',
@@ -22,7 +23,8 @@ const style = {
 
 const Details = (props) => {
   const { open, handleClose, cardDetails } = props;
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState('');
+  console.log(date,"date")
   const [paymentMethod, setPaymentMethod] = useState('');
 
   const handlePaymentMethod=()=>{
@@ -51,6 +53,16 @@ const Details = (props) => {
     var pay = new window.Razorpay(options);
     pay.open();
   }
+
+  const handleSubmit=()=>{
+    
+  }
+  // Function to format date as 'DD/MM/YYYY'
+  const formatDate = (date) => {
+    return dayjs(date).format('DD-MM-YYYY');
+  };
+
+
   return (
     <div >
       <Modal
@@ -66,7 +78,8 @@ const Details = (props) => {
           <div>
             <InputLabel id="demo-simple-select-label" style={{marginBottom:"10px"}}>Select Date</InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker sx={{ width: 300 }}/>
+              <DatePicker sx={{ width: 300 }} format='DD-MM-YYYY' value={date ? new Date(date) : null}  onChange={(newValue) => setDate(newValue)} 
+              />
             </LocalizationProvider>
           </div>
           <div style={{display:"flex", flexDirection:"row", gap:3,width:"100%",alignItems:"center"}}>
