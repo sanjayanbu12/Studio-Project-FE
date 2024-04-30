@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import './Details.css'; // This is where you'll import the global styles if needed
-import { Box, Button, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
+import './Details.css';
+import axios from 'axios';
+import { Box, InputLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -15,52 +12,67 @@ const style = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
-  display:"flex",
-  flexDirection:"column",
-  gap:3,
-  borderRadius:"10px",
+  display: "flex",
+  flexDirection: "column",
+  gap: 3,
+  borderRadius: "10px",
 };
 
-const Details = (props) => {
-  const { open, handleClose, cardDetails } = props;
-  const [date, setDate] = useState('');
-  console.log(date,"date")
-  const [paymentMethod, setPaymentMethod] = useState('');
 
-  const handlePaymentMethod=()=>{
+
+const Details = (props) => {
+  const { userid } = props;
+  const { open, handleClose, cardDetails } = props;
+
+  const [date, setDate] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
+  
+
+  const handlePaymentMethod = () => {
     var options = {
       key: "rzp_test_ERvSXNSWia7TU7",
-      key_secret:"qSjZ9b9pkY2szfpb7Bm58IaD",
-      amount: cardDetails.price *100,
-      currency:"INR",
-      name:"STUDIO_PURPLE",
-      description:"for testing purpose",
-      handler: function(response){
+      key_secret: "qSjZ9b9pkY2szfpb7Bm58IaD",
+      amount: cardDetails.price * 100,
+      currency: "INR",
+      name: "STUDIO_PURPLE",
+      description: "for testing purpose",
+      handler: function (response) {
         alert(response.razorpay_payment_id);
       },
       prefill: {
-        name:"Kishore",
-        email:"ksrki@gmail.com",
-        contact:"8270252916"
+        name: "Kishore",
+        email: "ksrki@gmail.com",
+        contact: "8270252916"
       },
-      notes:{
-        address:"Razorpay Corporate office"
+      notes: {
+        address: "Razorpay Corporate office"
       },
       theme: {
-        color:"#3399cc"
+        color: "#3399cc"
       }
     };
     var pay = new window.Razorpay(options);
     pay.open();
   }
 
-  const handleSubmit=()=>{
-    
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/reports', {
+
+        userId: userid,
+        cardTitle: cardDetails.cardTitle,
+        price: cardDetails.price,
+        date: date
+
+      });
+      if (!response.ok) {
+        throw new Error('Failed to submit the data.');
+      }
+      console.log('Data submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting data:', error.message);
+    }
   }
-  // Function to format date as 'DD/MM/YYYY'
-  const formatDate = (date) => {
-    return dayjs(date).format('DD-MM-YYYY');
-  };
 
 
   return (
@@ -72,36 +84,47 @@ const Details = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h4" component="h2" style={{ textAlign: "center" }}>
             {cardDetails.cardTitle}
           </Typography>
           <div>
-            <InputLabel id="demo-simple-select-label" style={{marginBottom:"10px"}}>Select Date</InputLabel>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker sx={{ width: 300 }} format='DD-MM-YYYY' value={date ? new Date(date) : null}  onChange={(newValue) => setDate(newValue)} 
-              />
-            </LocalizationProvider>
-          </div>
-          <div style={{display:"flex", flexDirection:"row", gap:3,width:"100%",alignItems:"center"}}>
-          <div>
-            <InputLabel id="demo-simple-select-label" style={{marginBottom:"10px"}}>Payment Method</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              style={{ width: 300,marginRight:"20px" }}
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            >
-              <MenuItem value='online'>online Payment</MenuItem>
-              <MenuItem value='offline'>offline Payment</MenuItem>
-            </Select>
+            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Select Date</InputLabel>
+            <TextField
+              style={{ width: 300 }}
+              variant="outlined"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
           </div>
           <div>
-            {paymentMethod === 'online' && <button className='paymentbutton' onClick={handlePaymentMethod}>Make Payment</button>}
+            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Price</InputLabel>
+            <TextField
+              style={{ width: 300 }}
+              variant="outlined"
+              value={cardDetails.price}
+              disabled
+            />
           </div>
+          <div style={{ display: "flex", flexDirection: "row", gap: 3, width: "100%", alignItems: "center" }}>
+            <div>
+              <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Payment Method</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                style={{ width: 300, marginRight: "20px" }}
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              >
+                <MenuItem value='online'>online Payment</MenuItem>
+                <MenuItem value='offline'>offline Payment</MenuItem>
+              </Select>
+            </div>
+            <div>
+              {paymentMethod === 'online' && <button className='paymentbutton' onClick={handlePaymentMethod}>Make Payment</button>}
+            </div>
           </div>
-          
-          <button className='confirmbutton' variant='contained'>Confirm Book</button>
+          <button className='confirmbutton' variant='contained' onClick={handleSubmit}>Confirm Book</button>
         </Box>
       </Modal>
     </div>
