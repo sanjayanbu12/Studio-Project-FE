@@ -1,7 +1,8 @@
 import React from 'react';
 import './Landingpage.css';
+import Slider from './Slider';
 import image1 from "../images/Zz02NWNkODEzODRiZDMxMWVkYWU1NjI2Y2QwNTA2MjdhYQ==.jpg";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Landingpage = () => {
     const scrollToSection = (sectionId) => {
@@ -85,20 +86,7 @@ const Landingpage = () => {
 
         {/* DIVISION_3 */}
         <div className="divisions division_3 padding_4x">
-          <section className="flex padding_1x">
-            <figure>
-              <img src="https://i.postimg.cc/T3vfL3G3/div-3.png" alt="" loading="lazy" />
-            </figure>
-            <article>
-              <h3 className="title small">Recycle old wood pallets to create Beautiful Furniture Items.</h3>
-              <p>
-                We have a dedicated team to recycle wood waste to create artistic gadgets such as <b>Mobile Holders</b>, <b>Desktop Clocks</b>, <b>Wall Clocks</b>, <b>Pen Holders</b>, <b>Chop Boards</b>, <b>Decorative Items</b> & much more...
-              </p>
-              <a href="#" className="btn btn_1">
-                Contact us
-              </a>
-            </article>
-          </section>
+         <Slider />
         </div>
       </main>
 

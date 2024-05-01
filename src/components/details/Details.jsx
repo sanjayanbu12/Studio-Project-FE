@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Details.css';
 import axios from 'axios';
-import { Box, InputLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
+import { Box, InputLabel, MenuItem, Modal, Select, TextField, Typography,CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
 const style = {
@@ -26,8 +26,8 @@ const Details = (props) => {
   const [date, setDate] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
   const [reports, setReports] = useState('');
-  console.log("reports", reports);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Added loading state
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -44,7 +44,6 @@ const Details = (props) => {
 
     fetchReports();
   }, []);
-  console.log("reports", reports);
 
 
   const handlePaymentMethod = () => {
@@ -77,21 +76,28 @@ const Details = (props) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/reports', {
-
         userId: userid,
         cardTitle: cardDetails.cardTitle,
         price: cardDetails.price,
         date: date
-
       });
-      if (!response.ok) {
+      if (response.status === 200) {
+        // Show loader for 3 seconds
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          handleClose(); // Close the popup
+        }, 3000);
+      } else {
         throw new Error('Failed to submit the data.');
       }
       console.log('Data submitted successfully!');
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setError("Report with this date already exists");
-      } 
+      } else {
+        setError("Failed to submit the data.");
+      }
     }
   }
 
@@ -164,7 +170,13 @@ const Details = (props) => {
               {paymentMethod === 'online' && <button className='paymentbutton' onClick={handlePaymentMethod}>Make Payment</button>}
             </div>
           </div>
-          <button className='confirmbutton' variant='contained' onClick={handleSubmit}>Confirm Book</button>
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </div>
+          ) : (
+            <button className='confirmbutton' variant='contained' onClick={handleSubmit}>Confirm Book</button>
+          )}
         </Box>
       </Modal>
     </div>
