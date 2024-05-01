@@ -57,7 +57,7 @@ const Signup = () => {
             setEmail("");
             setPassword("");
             setUsername("");
-            navigate('/');
+            navigate('/login');
         } catch (error) {
             console.log(error);
         }
