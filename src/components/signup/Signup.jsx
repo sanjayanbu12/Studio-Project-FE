@@ -128,7 +128,7 @@ const Signup = () => {
                 </div>
                 <button id='button1' type='button' onClick={handleSignup}>Submit</button>
                 <div>or</div>
-                <Link to="/">Already have an account?</Link>
+                <Link to="/login">Already have an account?</Link>
             </form>
         </div>
     )

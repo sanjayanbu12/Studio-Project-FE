@@ -41,7 +41,7 @@ const Topbar = () => {
         <div>
             <div class="topbar">
                 <div className='menubar'>
-                    <div className='animate-charcter'> Studi0 Purple</div>
+                    <div className='animate-charcter'> VIDEO VIEW </div>
                     <MenuIcon
                     style={{width:"50px",height:"50px",marginTop:"10px"}}
                         aria-controls={open ? 'basic-menu' : undefined}
