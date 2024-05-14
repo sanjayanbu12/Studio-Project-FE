@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Details.css';
 import axios from 'axios';
-import { Box, InputLabel, MenuItem, Modal, Select, TextField, Typography,CircularProgress } from '@mui/material';
+import { Box, InputLabel, MenuItem, Modal, Select, TextField, Typography, CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs'; 
 
 const style = {
   position: 'absolute',
@@ -23,11 +27,13 @@ const Details = (props) => {
   const { userid } = props;
   const { open, handleClose, cardDetails } = props;
 
-  const [date, setDate] = useState('');
-  const[name,setName]=useState('');
-  const[email,setEmail]=useState('');
+  const [date, setDate] = useState(null);
+  console.log(date)
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
   const [reports, setReports] = useState('');
+  console.log(reports)
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); // Added loading state
 
@@ -79,8 +85,8 @@ const Details = (props) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/reports', {
-        name:name,
-        email:email,
+        name: name,
+        email: email,
         userId: userid,
         cardTitle: cardDetails.cardTitle,
         price: cardDetails.price,
@@ -119,7 +125,7 @@ const Details = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        {error && (
+          {error && (
             <div style={{
               position: 'fixed',
               bottom: 20,
@@ -144,40 +150,42 @@ const Details = (props) => {
               variant="outlined"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              
+
             />
           </div>
           <div>
-            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Email</InputLabel>
+            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Address</InputLabel>
             <TextField
               style={{ width: 500 }}
               variant="outlined"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-             
+
             />
           </div>
           <div style={{ display: "flex", flexDirection: "row", gap: 10, width: "100%", alignItems: "center" }} >
-          <div>
-            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Select Date</InputLabel>
-            <TextField
-              style={{ width: 290 }}
-              variant="outlined"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            
-            />
-          </div>
-          <div>
-            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Price</InputLabel>
-            <TextField
-              style={{ width: 200 }}
-              variant="outlined"
-              value={cardDetails.price}
-              disabled
-            />
-          </div>
+            <div>
+              <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Select Date</InputLabel>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker  
+                format='DD/MM/YYYY'
+                value={date} onChange={(e) => setDate(e)}
+                disablePast 
+                shouldDisableDate={(day) =>
+                  reports.some((reportDate) => dayjs(day).isSame(reportDate, 'day'))
+                }
+                />
+              </LocalizationProvider>
+            </div>
+            <div>
+              <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Price</InputLabel>
+              <TextField
+                style={{ width: 200 }}
+                variant="outlined"
+                value={cardDetails.price}
+                disabled
+              />
+            </div>
           </div>
           <div style={{ display: "flex", flexDirection: "row", gap: 3, width: "100%", alignItems: "center" }}>
             <div>

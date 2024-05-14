@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 const AppointmentForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    date: '',
+    date: null,
     purpose: ''
   });
-  const [alertOpen, setAlertOpen] = useState(false); // State to control alert visibility
-
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [appdates, setAppdates] = useState([]);
+  console.log(appdates)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleDateChange = (newDate) => {
+    setFormData({ ...formData, date: newDate });
   };
 
   const handleSubmit = async (e) => {
@@ -26,10 +34,10 @@ const AppointmentForm = () => {
       setFormData({
         name: '',
         email: '',
-        date: '',
+        date: null,
         purpose: ''
       });
-
+      fetchReports();
       // Show success alert
       setAlertOpen(true);
     } catch (error) {
@@ -40,6 +48,22 @@ const AppointmentForm = () => {
   const handleAlertClose = () => {
     setAlertOpen(false);
   };
+  const fetchReports = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/auth/Appointment');
+      console.log(response)
+      if (response.status === 200) {
+        const appoDates = (response.data.reports.map((data) => data.date));
+        setAppdates(appoDates);
+      }
+    } catch (error) {
+      console.error('Error fetching reports:', error.message);
+    }
+  };
+  useEffect(() => {
+
+    fetchReports();
+  }, []);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center',alignItems:'center',marginTop:'50px' }} >
@@ -71,13 +95,16 @@ const AppointmentForm = () => {
             </div>
             <div className="input">
               <label className="input__label">Select Date</label>
-              <input
-                className="input__field"
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker  
+                format='DD/MM/YYYY'
+                value={formData.date} onChange={(newDate) => handleDateChange(newDate)}
+                disablePast 
+                shouldDisableDate={(day) =>
+                  appdates.some((dates) => dayjs(day).isSame(dates, 'day'))
+                }
+                />
+              </LocalizationProvider>
             </div>
             <div className="input">
               <label className="input__label">Purpose for meeting</label>
