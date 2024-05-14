@@ -82,9 +82,7 @@
     flex-direction: column;
   }
   
-  .input + .input {
-    /* margin-top: 1.75rem; */
-  }
+
   
   .input__label {
     font-weight: 700;

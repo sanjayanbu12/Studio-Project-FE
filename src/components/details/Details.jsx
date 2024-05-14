@@ -24,6 +24,8 @@ const Details = (props) => {
   const { open, handleClose, cardDetails } = props;
 
   const [date, setDate] = useState('');
+  const[name,setName]=useState('');
+  const[email,setEmail]=useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
   const [reports, setReports] = useState('');
   const [error, setError] = useState(null);
@@ -72,10 +74,13 @@ const Details = (props) => {
     var pay = new window.Razorpay(options);
     pay.open();
   }
+  console.log(cardDetails, "cardDetails")
 
   const handleSubmit = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/reports', {
+        name:name,
+        email:email,
         userId: userid,
         cardTitle: cardDetails.cardTitle,
         price: cardDetails.price,
@@ -133,9 +138,30 @@ const Details = (props) => {
             {cardDetails.cardTitle}
           </Typography>
           <div>
+            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Name</InputLabel>
+            <TextField
+              style={{ width: 500 }}
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              
+            />
+          </div>
+          <div>
+            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Email</InputLabel>
+            <TextField
+              style={{ width: 500 }}
+              variant="outlined"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+             
+            />
+          </div>
+          <div style={{ display: "flex", flexDirection: "row", gap: 10, width: "100%", alignItems: "center" }} >
+          <div>
             <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Select Date</InputLabel>
             <TextField
-              style={{ width: 300 }}
+              style={{ width: 290 }}
               variant="outlined"
               type="date"
               value={date}
@@ -146,11 +172,12 @@ const Details = (props) => {
           <div>
             <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Price</InputLabel>
             <TextField
-              style={{ width: 300 }}
+              style={{ width: 200 }}
               variant="outlined"
               value={cardDetails.price}
               disabled
             />
+          </div>
           </div>
           <div style={{ display: "flex", flexDirection: "row", gap: 3, width: "100%", alignItems: "center" }}>
             <div>

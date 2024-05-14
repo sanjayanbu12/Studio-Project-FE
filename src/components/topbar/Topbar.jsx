@@ -6,6 +6,7 @@ import Form from '../form/Form';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import AppointmentForm from '../form/AppointmentForm';
 
 const Topbar = () => {
     const [activeText, setActiveText] = useState('Plans');
@@ -66,7 +67,9 @@ const Topbar = () => {
                 <div className='threeroot'>
                     <div className={activeText === 'Plans' ? 'active-text' : ''} onClick={() => setActiveText('Plans')} style={{ padding: "0 10px 5px 10px" }}>Plans</div>
                     {role === 'Admin' ? <div className={activeText === 'Form' ? 'active-text' : ''} onClick={() => setActiveText('Form')} style={{ padding: "0 10px 5px 10px" }}>Form</div> : null}
+                     <div className={activeText === 'Appointment' ? 'active-text' : ''} onClick={() => setActiveText('Appointment')} style={{ padding: "0 10px 5px 10px" }}>Appointment</div> 
                     {role === 'Admin' ? <div className={activeText === 'Report' ? 'active-text' : ''} onClick={() => setActiveText('Report')} style={{ padding: "0 10px 5px 10px" }}>Report</div> : null}
+              
                 </div>
             </div>
             {activeText === 'Plans' && (
@@ -74,6 +77,9 @@ const Topbar = () => {
             )}
             {activeText === 'Form' && (
                 <Form userid={userid} />
+            )}
+             {activeText === 'Appointment' && (
+                <AppointmentForm />
             )}
             {activeText === 'Report' && (
                 <Report />
