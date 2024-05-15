@@ -31,6 +31,7 @@ const Details = (props) => {
   console.log(date)
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phoneno,setPhoneno] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
   const [reports, setReports] = useState('');
   console.log(reports)
@@ -88,6 +89,7 @@ const Details = (props) => {
         name: name,
         email: email,
         userId: userid,
+        phoneno: phoneno,
         cardTitle: cardDetails.cardTitle,
         price: cardDetails.price,
         date: date
@@ -150,6 +152,16 @@ const Details = (props) => {
               variant="outlined"
               value={name}
               onChange={(e) => setName(e.target.value)}
+
+            />
+          </div>
+          <div>
+            <InputLabel id="demo-simple-select-label" style={{ marginBottom: "10px" }}>Phone No</InputLabel>
+            <TextField
+              style={{ width: 500 }}
+              variant="outlined"
+              value={phoneno}
+              onChange={(e) => setPhoneno(e.target.value)}
 
             />
           </div>

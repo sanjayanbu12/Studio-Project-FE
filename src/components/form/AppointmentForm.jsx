@@ -16,6 +16,7 @@ const AppointmentForm = () => {
   });
   const [alertOpen, setAlertOpen] = useState(false);
   const [appdates, setAppdates] = useState([]);
+  const [loading, setLoading] = useState(false); 
   console.log(appdates)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +26,7 @@ const AppointmentForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       // Make POST request to API endpoint
@@ -42,6 +44,8 @@ const AppointmentForm = () => {
       setAlertOpen(true);
     } catch (error) {
       console.error('Error booking appointment:', error);
+    }finally {
+      setLoading(false); // Reset loading state after submission
     }
   };
 
@@ -119,7 +123,7 @@ const AppointmentForm = () => {
           </div>
           <div className="modal__footer">
             <button type="submit" className="button button--primary">
-              Book Appointment
+            {loading ? 'Booking...' : 'Book Appointment'}
             </button>
           </div>
         </form>
